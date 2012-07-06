@@ -16,6 +16,7 @@
 
 @implementation CalculatorViewController
 @synthesize display;
+@synthesize history;
 @synthesize userInTheMiddleOfEnteringANumber;
 @synthesize brain=_brain;
 
@@ -25,6 +26,19 @@
         _brain=[[CalculatorBrain alloc] init];
     }
     return _brain;
+}
+- (IBAction)floatingPointPressed {
+    NSRange range=[self.display.text rangeOfString:@"."];
+    if(range.location == NSNotFound){
+        self.display.text=[self.display.text stringByAppendingString:@"."];
+        userInTheMiddleOfEnteringANumber=YES;
+    }
+}
+- (IBAction)clearPressed {
+    [self.brain clearStack];
+    self.history.text=@"";
+    self.display.text=@"0";
+    userInTheMiddleOfEnteringANumber=NO;
 }
 
 - (IBAction)digitPressed:(UIButton*)sender {
@@ -39,6 +53,8 @@
 - (IBAction)enterPressed 
 {
     [self.brain pushOperand:[self.display.text doubleValue]];
+    self.history.text = [self.history.text stringByAppendingString:[@" " stringByAppendingString:self.display.text]];
+    
     userInTheMiddleOfEnteringANumber=NO;
 }
 
@@ -50,7 +66,12 @@
     }
     NSString *operation=[sender currentTitle];
     double result= [self.brain performOperation:operation];
+    self.history.text = [self.history.text stringByAppendingString:[@" " stringByAppendingString:operation]];
     self.display.text=[NSString stringWithFormat:@"%g", result];
 }
 
+- (void)viewDidUnload {
+    [self setHistory:nil];
+    [super viewDidUnload];
+}
 @end

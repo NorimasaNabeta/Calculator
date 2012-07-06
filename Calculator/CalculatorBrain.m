@@ -33,6 +33,11 @@
     return @"Implement this in Homework #2";
 }
 
+-(void) clearStack
+{
+    [self.programStack removeAllObjects];
+}
+
 - (void)pushOperand:(double)operand
 {
     [self.programStack addObject:[NSNumber numberWithDouble:operand]];
@@ -71,10 +76,27 @@
             double divisor = [self popOperandOffProgramStack:stack];
             if (divisor) result = [self popOperandOffProgramStack:stack] / divisor;
         }
+        
+        // add-->
+        else if( [operation isEqualToString:@"sin"]){
+            result = sin([self popOperandOffProgramStack:stack]);
+        } else if( [operation isEqualToString:@"cos"]){
+            result = cos([self popOperandOffProgramStack:stack]);
+        } else if( [operation isEqualToString:@"sqrt"]){
+            result = sqrt([self popOperandOffProgramStack:stack]);
+        } else if( [operation isEqualToString:@"log"]){
+            result = log([self popOperandOffProgramStack:stack]);
+        } else if( [operation isEqualToString:@"π"]){
+            result = M_PI;
+        } else if( [operation isEqualToString:@"e"]){
+            result = M_E;
+        }    
+        // <--add 
     }
 
     return result;
 }
+
 
 + (double)runProgram:(id)program
 {
