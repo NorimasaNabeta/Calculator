@@ -142,9 +142,7 @@
 - (double)performOperation:(NSString *)operation
        usingVariableValues:(NSDictionary*)variableValues
 {
-    if (! [operation isEqualToString:@"dummy"]) {
-        [self.programStack addObject:operation];
-    }
+    [self.programStack addObject:operation];
     return [[self class] runProgram:self.program usingVariableValues:variableValues];
 }
 
@@ -221,7 +219,7 @@
 // 
 + (NSSet*) variablesUsingInProgram:(id)program
 {
-    NSSet *opSet = [[NSSet alloc] initWithObjects:@"+", @"-", @"/", @"*", @"e", @"π", @"sqrt", @"sin", @"cos", @"log", @"dummy", nil]; 
+    NSSet *opSet = [[NSSet alloc] initWithObjects:@"+", @"-", @"/", @"*", @"e", @"π", @"sqrt", @"sin", @"cos", @"log", nil]; 
     NSSet *result;
     NSMutableArray *stack;
     NSMutableSet *chkSet=[[NSMutableSet alloc] initWithArray:nil];

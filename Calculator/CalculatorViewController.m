@@ -69,11 +69,9 @@
     if(userInTheMiddleOfEnteringANumber){
         [self enterPressed];
     }
-    double result= [self.brain performOperation:@"dummy" usingVariableValues:self.variableValues];
-    self.history.text=[[self.brain class] descriptionOfProgram:self.brain.program];
+    double result=[[self.brain class] runProgram:self.brain.program usingVariableValues:self.variableValues];
     self.display.text=[NSString stringWithFormat:@"%g", result];
-    
-    // self.variables.text = [self.brain descriptionVariables];
+    self.history.text=[[self.brain class] descriptionOfProgram:self.brain.program];
     self.variables.text=@"";
     NSSet* sVar=[[self.brain class] variablesUsingInProgram:self.brain.program];
     if( sVar){
@@ -95,6 +93,8 @@
         if ([topOfStack isKindOfClass:[NSString class]]){
             self.display.text=@"";
         }
+        double result=[[self.brain class] runProgram:self.brain.program usingVariableValues:self.variableValues];
+        self.display.text=[NSString stringWithFormat:@"%g", result];
         self.history.text=[[self.brain class] descriptionOfProgram:self.brain.program];
     }
 }
