@@ -72,7 +72,16 @@
     double result= [self.brain performOperation:@"dummy" usingVariableValues:self.variableValues];
     self.history.text=[[self.brain class] descriptionOfProgram:self.brain.program];
     self.display.text=[NSString stringWithFormat:@"%g", result];
-    self.variables.text = [self.brain descriptionVariables];
+    
+    // self.variables.text = [self.brain descriptionVariables];
+    self.variables.text=@"";
+    NSSet* sVar=[[self.brain class] variablesUsingInProgram:self.brain.program];
+    if( sVar){
+        for (NSString* key in sVar){
+            double val = [[self.variableValues objectForKey:key] doubleValue];
+            self.variables.text= [self.variables.text stringByAppendingFormat:@"%@=%g ", key, val];
+        }
+    }
 
 }
 
@@ -130,7 +139,14 @@
     double result= [self.brain performOperation:operation usingVariableValues:self.variableValues];
     self.history.text=[[self.brain class] descriptionOfProgram:self.brain.program];
     self.display.text=[NSString stringWithFormat:@"%g", result];
-    self.variables.text = [self.brain descriptionVariables];
+    self.variables.text=@"";
+    NSSet* sVar=[[self.brain class] variablesUsingInProgram:self.brain.program];
+    if( sVar){
+        for (NSString* key in sVar){
+            double val = [[self.variableValues objectForKey:key] doubleValue];
+            self.variables.text= [self.variables.text stringByAppendingFormat:@"%@=%g ", key, val];
+        }
+    }
 }
 - (void)viewDidUnload {
     [self setDisplay:nil];

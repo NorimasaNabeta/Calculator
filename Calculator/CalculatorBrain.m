@@ -14,9 +14,7 @@
 @end
 
 @implementation CalculatorBrain
-
 @synthesize programStack = _programStack;
-@synthesize descriptionVariables=_descriptionVariables;
 
 - (NSMutableArray *)programStack
 {
@@ -125,7 +123,6 @@
 
 -(void) clearStack
 {
-    self.descriptionVariables=@"";
     [self.programStack removeAllObjects];
 }
 
@@ -148,16 +145,6 @@
     if (! [operation isEqualToString:@"dummy"]) {
         [self.programStack addObject:operation];
     }
-    NSSet* sVar=[[self class] variablesUsingInProgram:self.program];
-    NSString *dump=@"";
-    if( sVar){
-        for (NSString* key in sVar){
-            double val = [[variableValues objectForKey:key] doubleValue];
-            dump = [dump stringByAppendingFormat:@"%@=%g ", key, val];
-        }
-    }
-    self.descriptionVariables=dump;
-    
     return [[self class] runProgram:self.program usingVariableValues:variableValues];
 }
 
@@ -206,7 +193,6 @@
             NSEnumerator *enumDict = [variableValues keyEnumerator];
             NSString *key;
             while (key=[enumDict nextObject]) {
-                // NSLog(@"key:%@ op:%@", key, operation);
                 if ([operation isEqualToString:key]) {
                     result=[[variableValues objectForKey:key] doubleValue];
                     break;

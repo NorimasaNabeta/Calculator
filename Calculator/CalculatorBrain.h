@@ -17,7 +17,6 @@
 - (id)popStack;
 
 @property (nonatomic, readonly) id program;
-@property (nonatomic, strong) NSString *descriptionVariables;
 
 + (NSString *)descriptionOfProgram:(id)program;
 + (double)runProgram:(id)program usingVariableValues:(NSDictionary*)variableValues;
