@@ -27,10 +27,10 @@
 -(NSDictionary*) variableValues
 {
     if(! _variableValues){
-        _variableValues = [[NSDictionary alloc] initWithObjectsAndKeys:
-                           [NSNumber numberWithDouble:5], @"x",
-                           [NSNumber numberWithDouble:1], @"a",
-                           [NSNumber numberWithDouble:2], @"b", nil];
+        _variableValues = [NSDictionary dictionaryWithObjectsAndKeys:
+                           [NSNumber numberWithDouble:0], @"x",
+                           [NSNumber numberWithDouble:0], @"a",
+                           [NSNumber numberWithDouble:0], @"b", nil];
     }
     return _variableValues;
 }
@@ -43,53 +43,54 @@
     return _brain;
 }
 
-// Assignment2:Requiredtask#3b
-//
-- (IBAction)variablePressed:(id)sender {
-    if(userInTheMiddleOfEnteringANumber){
-        [self enterPressed];
-    }
-    NSString *operation=[sender currentTitle];
-    double result= [self.brain performOperation:operation usingVariableValues:self.variableValues];
-    self.history.text=[self.brain descriptionInStack];
-    self.display.text=[NSString stringWithFormat:@"%g", result];
-}
 
 // Assignment2:Requiredtask#3e
 //
 - (IBAction)presetTestPressed:(UIButton*)sender {
     if ([sender.titleLabel.text isEqualToString:@"Test1"]) {
-        // a) 3 E 5 E 6 E 7 + * -
-        [self.brain clearStack];
-        [self.brain pushOperand:[@"3" doubleValue]];
-        [self.brain pushOperand:[@"5" doubleValue]];
-        [self.brain pushOperand:[@"6" doubleValue]];
-        [self.brain pushOperand:[@"7" doubleValue]];
-        self.display.text=[NSString stringWithFormat:@"%g", [self.brain performOperation:@"+" usingVariableValues:self.variableValues]];
-        self.display.text=[NSString stringWithFormat:@"%g", [self.brain performOperation:@"*" usingVariableValues:self.variableValues]];
-        self.display.text=[NSString stringWithFormat:@"%g", [self.brain performOperation:@"-" usingVariableValues:self.variableValues]];
+        self.variableValues = [NSDictionary dictionaryWithObjectsAndKeys:
+                           [NSNumber numberWithDouble:5], @"x",
+                           [NSNumber numberWithDouble:1], @"a",
+                           [NSNumber numberWithDouble:2], @"b", nil];
+
     }
     else if ([sender.titleLabel.text isEqualToString:@"Test2"]) {
-        // b) 3 E 5 + sqrt
-        [self.brain clearStack];
-        [self.brain pushOperand:[@"3" doubleValue]];
-        [self.brain pushOperand:[@"5" doubleValue]];
-        self.display.text=[NSString stringWithFormat:@"%g", [self.brain performOperation:@"+" usingVariableValues:self.variableValues]];
-        self.display.text=[NSString stringWithFormat:@"%g", [self.brain performOperation:@"sqrt" usingVariableValues:self.variableValues]];
+        self.variableValues = [NSDictionary dictionaryWithObjectsAndKeys:
+                               [NSNumber numberWithDouble:10], @"x",
+                               [NSNumber numberWithDouble:.6], @"a",
+                               [NSNumber numberWithDouble:23], @"b", nil];
     }
     else if ([sender.titleLabel.text isEqualToString:@"Test3"]) {
-        // c) 3 sqrt sqrt
-        [self.brain clearStack];
-        [self.brain pushOperand:[@"3" doubleValue]];
-        self.display.text=[NSString stringWithFormat:@"%g", [self.brain performOperation:@"sqrt" usingVariableValues:self.variableValues]];
-        self.display.text=[NSString stringWithFormat:@"%g", [self.brain performOperation:@"sqrt" usingVariableValues:self.variableValues]];
+        self.variableValues = [NSDictionary dictionaryWithObjectsAndKeys:
+                               [NSNumber numberWithDouble:9], @"x",
+                               [NSNumber numberWithDouble:3], @"a",
+                               [NSNumber numberWithDouble:7], @"b", nil];
     }
+    if(userInTheMiddleOfEnteringANumber){
+        [self enterPressed];
+    }
+    double result= [self.brain performOperation:@"dummy" usingVariableValues:self.variableValues];
+    self.history.text=[[self.brain class] descriptionOfProgram:self.brain.program];
+    self.display.text=[NSString stringWithFormat:@"%g", result];
+    self.variables.text = [self.brain descriptionVariables];
+
 }
 
 // Assignment2:Requiredtask#4
-//
+// Hitting Undo when the user is in the middle of typing should take back the last digit or decimal point pressed until doing so would clear the display entirely at which point it shouldshow the result of running the brain's current program in the display( and now the user is clearly not in the middle of typing, so take care of that)
 - (IBAction)undoPressed {
+    if(userInTheMiddleOfEnteringANumber){
+        self.display.text=[self.display.text substringToIndex:self.display.text.length-1];
+    } else {
+        id topOfStack = [self.brain popStack];
+        if ([topOfStack isKindOfClass:[NSString class]]){
+            self.display.text=@"";
+        }
+        self.history.text=[[self.brain class] descriptionOfProgram:self.brain.program];
+    }
 }
+
+
 - (IBAction)floatingPointPressed {
     NSRange range=[self.display.text rangeOfString:@"."];
     if(range.location == NSNotFound){
@@ -101,6 +102,7 @@
     [self.brain clearStack];
     self.history.text=@"";
     self.display.text=@"0";
+    self.variables.text=@"";
     userInTheMiddleOfEnteringANumber=NO;
 }
 
@@ -116,27 +118,22 @@
 - (IBAction)enterPressed 
 {
     [self.brain pushOperand:[self.display.text doubleValue]];
-    self.history.text = [self.history.text stringByAppendingString:[@" " stringByAppendingString:self.display.text]];
-    
+    self.history.text=[[self.brain class] descriptionOfProgram:self.brain.program];
     userInTheMiddleOfEnteringANumber=NO;
 }
 
 - (IBAction)operationPressed:(id)sender {
-    
-    // ('6' 'Enter' '4' '-') would be the same as ('6' 'Enter' '4' 'Enter' '-')
     if(userInTheMiddleOfEnteringANumber){
         [self enterPressed];
     }
     NSString *operation=[sender currentTitle];
     double result= [self.brain performOperation:operation usingVariableValues:self.variableValues];
-    //self.history.text = [self.brain descriptionOfProgram:operation];
-//    self.history.text = [self.history.text stringByAppendingString:[@" " stringByAppendingString:operation]];
-    self.history.text=[self.brain descriptionInStack];
+    self.history.text=[[self.brain class] descriptionOfProgram:self.brain.program];
     self.display.text=[NSString stringWithFormat:@"%g", result];
     self.variables.text = [self.brain descriptionVariables];
 }
-
 - (void)viewDidUnload {
+    [self setDisplay:nil];
     [self setHistory:nil];
     [self setVariables:nil];
     [super viewDidUnload];

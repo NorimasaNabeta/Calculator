@@ -16,7 +16,6 @@
 @implementation CalculatorBrain
 
 @synthesize programStack = _programStack;
-@synthesize descriptionInStack=_descriptionInStack;
 @synthesize descriptionVariables=_descriptionVariables;
 
 - (NSMutableArray *)programStack
@@ -50,6 +49,7 @@
 + (NSString *) descriptionOfTopOfStack:(NSMutableArray *)stack 
                         callFromTop:(BOOL) top
 {
+    NSSet *unaryOps = [[NSSet alloc] initWithObjects:@"π", @"sqrt", @"sin", @"cos", @"log", nil]; 
     NSString *result = @"";
     
     id topOfStack = [stack lastObject];
@@ -95,13 +95,7 @@
                 result = [result stringByAppendingFormat:@"(%@ %@ %@)", op,operation,divisor];
             }
         }
-        else if( [operation isEqualToString:@"sin"]){
-            result = [result stringByAppendingFormat:@" %@(%@) ", operation, [self descriptionOfTopOfStack:stack callFromTop:YES]];
-        } else if( [operation isEqualToString:@"cos"]){
-            result = [result stringByAppendingFormat:@" %@(%@) ", operation, [self descriptionOfTopOfStack:stack callFromTop:YES]];
-        } else if( [operation isEqualToString:@"sqrt"]){
-            result = [result stringByAppendingFormat:@" %@(%@) ", operation, [self descriptionOfTopOfStack:stack callFromTop:YES]];
-        } else if( [operation isEqualToString:@"log"]){
+        else if([unaryOps containsObject:operation]){
             result = [result stringByAppendingFormat:@" %@(%@) ", operation, [self descriptionOfTopOfStack:stack callFromTop:YES]];
         } else if( [operation isEqualToString:@"π"]){
             result = operation;
@@ -131,7 +125,16 @@
 
 -(void) clearStack
 {
+    self.descriptionVariables=@"";
     [self.programStack removeAllObjects];
+}
+
+-(id) popStack
+{
+    id topOfStack = [self.programStack lastObject];
+    if (topOfStack) [self.programStack removeLastObject];
+   
+    return topOfStack;
 }
 
 - (void)pushOperand:(double)operand
@@ -142,14 +145,11 @@
 - (double)performOperation:(NSString *)operation
        usingVariableValues:(NSDictionary*)variableValues
 {
-    [self.programStack addObject:operation];
-
-    NSString *dump=[[self class] descriptionOfProgram:self.program];
-    NSLog(@"desc:%@", dump);
-    self.descriptionInStack=dump;
-    
+    if (! [operation isEqualToString:@"dummy"]) {
+        [self.programStack addObject:operation];
+    }
     NSSet* sVar=[[self class] variablesUsingInProgram:self.program];
-    dump=@"";
+    NSString *dump=@"";
     if( sVar){
         for (NSString* key in sVar){
             double val = [[variableValues objectForKey:key] doubleValue];
@@ -189,8 +189,6 @@
             double divisor = [self popOperandOffProgramStack:stack usingVariableValues:variableValues];
             if (divisor) result = [self popOperandOffProgramStack:stack usingVariableValues:variableValues] / divisor;
         }
-        
-        // add-->
         else if( [operation isEqualToString:@"sin"]){
             result = sin([self popOperandOffProgramStack:stack usingVariableValues:variableValues]);
         } else if( [operation isEqualToString:@"cos"]){
@@ -204,7 +202,6 @@
         } else if( [operation isEqualToString:@"e"]){
             result = M_E;
         }    
-        // <--add 
         else if( variableValues ){
             NSEnumerator *enumDict = [variableValues keyEnumerator];
             NSString *key;
@@ -238,7 +235,7 @@
 // 
 + (NSSet*) variablesUsingInProgram:(id)program
 {
-    NSSet *opSet = [[NSSet alloc] initWithObjects:@"+", @"-", @"/", @"*", @"e", @"π", @"sqrt", @"sin", @"cos", @"log", nil]; 
+    NSSet *opSet = [[NSSet alloc] initWithObjects:@"+", @"-", @"/", @"*", @"e", @"π", @"sqrt", @"sin", @"cos", @"log", @"dummy", nil]; 
     NSSet *result;
     NSMutableArray *stack;
     NSMutableSet *chkSet=[[NSMutableSet alloc] initWithArray:nil];

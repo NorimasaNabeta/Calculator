@@ -14,9 +14,9 @@
 - (void)pushOperand:(double)operand;
 - (double)performOperation:(NSString *)op usingVariableValues:(NSDictionary*)variableValues;
 - (void)clearStack;
+- (id)popStack;
 
 @property (nonatomic, readonly) id program;
-@property (nonatomic, strong) NSString *descriptionInStack;
 @property (nonatomic, strong) NSString *descriptionVariables;
 
 + (NSString *)descriptionOfProgram:(id)program;
