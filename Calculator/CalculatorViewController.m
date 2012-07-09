@@ -12,7 +12,7 @@
 @interface CalculatorViewController ()
 @property (nonatomic) BOOL userInTheMiddleOfEnteringANumber;
 @property (nonatomic,strong) CalculatorBrain *brain;
-@property (nonatomic,strong) NSDictionary* variableValues;
+@property (nonatomic,strong) NSDictionary* testVariableValues;
 @end
 
 @implementation CalculatorViewController
@@ -21,18 +21,18 @@
 @synthesize variables;
 @synthesize userInTheMiddleOfEnteringANumber;
 @synthesize brain=_brain;
-@synthesize variableValues=_variableValues;
+@synthesize testVariableValues=_testVariableValues;
 
 
 -(NSDictionary*) variableValues
 {
-    if(! _variableValues){
-        _variableValues = [NSDictionary dictionaryWithObjectsAndKeys:
+    if(! _testVariableValues){
+        _testVariableValues = [NSDictionary dictionaryWithObjectsAndKeys:
                            [NSNumber numberWithDouble:0], @"x",
                            [NSNumber numberWithDouble:0], @"a",
                            [NSNumber numberWithDouble:0], @"b", nil];
     }
-    return _variableValues;
+    return _testVariableValues;
 }
 
 -(CalculatorBrain*) brain
@@ -48,20 +48,20 @@
 //
 - (IBAction)presetTestPressed:(UIButton*)sender {
     if ([sender.titleLabel.text isEqualToString:@"Test1"]) {
-        self.variableValues = [NSDictionary dictionaryWithObjectsAndKeys:
+        self.testVariableValues = [NSDictionary dictionaryWithObjectsAndKeys:
                            [NSNumber numberWithDouble:5], @"x",
                            [NSNumber numberWithDouble:1], @"a",
                            [NSNumber numberWithDouble:2], @"b", nil];
 
     }
     else if ([sender.titleLabel.text isEqualToString:@"Test2"]) {
-        self.variableValues = [NSDictionary dictionaryWithObjectsAndKeys:
+        self.testVariableValues = [NSDictionary dictionaryWithObjectsAndKeys:
                                [NSNumber numberWithDouble:10], @"x",
                                [NSNumber numberWithDouble:.6], @"a",
                                [NSNumber numberWithDouble:23], @"b", nil];
     }
     else if ([sender.titleLabel.text isEqualToString:@"Test3"]) {
-        self.variableValues = [NSDictionary dictionaryWithObjectsAndKeys:
+        self.testVariableValues = [NSDictionary dictionaryWithObjectsAndKeys:
                                [NSNumber numberWithDouble:9], @"x",
                                [NSNumber numberWithDouble:3], @"a",
                                [NSNumber numberWithDouble:7], @"b", nil];
@@ -69,14 +69,15 @@
     if(userInTheMiddleOfEnteringANumber){
         [self enterPressed];
     }
-    double result=[[self.brain class] runProgram:self.brain.program usingVariableValues:self.variableValues];
+    
+    double result=[CalculatorBrain runProgram:self.brain.program usingVariableValues:self.testVariableValues];
     self.display.text=[NSString stringWithFormat:@"%g", result];
-    self.history.text=[[self.brain class] descriptionOfProgram:self.brain.program];
+    self.history.text=[CalculatorBrain descriptionOfProgram:self.brain.program];
     self.variables.text=@"";
-    NSSet* sVar=[[self.brain class] variablesUsingInProgram:self.brain.program];
+    NSSet* sVar=[CalculatorBrain variablesUsingInProgram:self.brain.program];
     if( sVar){
         for (NSString* key in sVar){
-            double val = [[self.variableValues objectForKey:key] doubleValue];
+            double val = [[self.testVariableValues objectForKey:key] doubleValue];
             self.variables.text= [self.variables.text stringByAppendingFormat:@"%@=%g ", key, val];
         }
     }
@@ -84,7 +85,10 @@
 }
 
 // Assignment2:Requiredtask#4
-// Hitting Undo when the user is in the middle of typing should take back the last digit or decimal point pressed until doing so would clear the display entirely at which point it shouldshow the result of running the brain's current program in the display( and now the user is clearly not in the middle of typing, so take care of that)
+// Hitting Undo when the user is in the middle of typing should take back the last digit or 
+// decimal point pressed until doing so would clear the display entirely at which point it should
+// show the result of running the brain's current program in the display( and now the user 
+// is clearly not in the middle of typing, so take care of that)
 - (IBAction)undoPressed {
     if(userInTheMiddleOfEnteringANumber){
         self.display.text=[self.display.text substringToIndex:self.display.text.length-1];
@@ -93,9 +97,9 @@
         if ([topOfStack isKindOfClass:[NSString class]]){
             self.display.text=@"";
         }
-        double result=[[self.brain class] runProgram:self.brain.program usingVariableValues:self.variableValues];
+        double result=[CalculatorBrain runProgram:self.brain.program usingVariableValues:self.testVariableValues];
         self.display.text=[NSString stringWithFormat:@"%g", result];
-        self.history.text=[[self.brain class] descriptionOfProgram:self.brain.program];
+        self.history.text=[CalculatorBrain descriptionOfProgram:self.brain.program];
     }
 }
 
@@ -127,7 +131,7 @@
 - (IBAction)enterPressed 
 {
     [self.brain pushOperand:[self.display.text doubleValue]];
-    self.history.text=[[self.brain class] descriptionOfProgram:self.brain.program];
+    self.history.text=[CalculatorBrain descriptionOfProgram:self.brain.program];
     userInTheMiddleOfEnteringANumber=NO;
 }
 
@@ -136,14 +140,14 @@
         [self enterPressed];
     }
     NSString *operation=[sender currentTitle];
-    double result= [self.brain performOperation:operation usingVariableValues:self.variableValues];
-    self.history.text=[[self.brain class] descriptionOfProgram:self.brain.program];
+    double result= [self.brain performOperation:operation usingVariableValues:self.testVariableValues];
     self.display.text=[NSString stringWithFormat:@"%g", result];
+    self.history.text=[CalculatorBrain descriptionOfProgram:self.brain.program];
     self.variables.text=@"";
-    NSSet* sVar=[[self.brain class] variablesUsingInProgram:self.brain.program];
+    NSSet* sVar=[CalculatorBrain variablesUsingInProgram:self.brain.program];
     if( sVar){
         for (NSString* key in sVar){
-            double val = [[self.variableValues objectForKey:key] doubleValue];
+            double val = [[self.testVariableValues objectForKey:key] doubleValue];
             self.variables.text= [self.variables.text stringByAppendingFormat:@"%@=%g ", key, val];
         }
     }
