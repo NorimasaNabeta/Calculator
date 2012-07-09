@@ -28,7 +28,7 @@
 }
 
 
-// Assignment2:RequiredTask#2 
+// RequiredTask#2 
 // a. It should display all single-operand operations using "function" notation.
 //    e.g. '10' 'sqrt' --> "sqrt(10)"
 // b. It should display all single-operand operations using "infix" notation if appropriate,
@@ -43,16 +43,18 @@
 // 3 sqrt sqrt --> "sqrt(sqrt(3))"
 // 3 E 5 sqrt + --> "3 + sqrt(5)" 
 //
-
+// In case of no operand in the stack, operation command should be error?
+//
 + (NSString *) descriptionOfTopOfStack:(NSMutableArray *)stack 
                         callFromTop:(BOOL) top
 {
-    NSSet *unaryOps = [[NSSet alloc] initWithObjects:@"π", @"sqrt", @"sin", @"cos", @"log", nil]; 
+    NSSet *nonOps = [[NSSet alloc] initWithObjects:@"π", @"e", nil]; 
+    NSSet *unaryOps = [[NSSet alloc] initWithObjects:@"sqrt", @"sin", @"cos", @"log", nil]; 
+    NSSet *binaryOps = [[NSSet alloc] initWithObjects:@"+", @"-", @"/", @"*", nil]; 
     NSString *result = @"";
     
     id topOfStack = [stack lastObject];
     if (topOfStack) [stack removeLastObject];
-    
     if ([topOfStack isKindOfClass:[NSNumber class]])
     {
         result = [topOfStack stringValue];
@@ -60,47 +62,21 @@
     else if ([topOfStack isKindOfClass:[NSString class]])
     {
         NSString *operation = topOfStack;
-        if ([operation isEqualToString:@"+"]) {
+        if([binaryOps containsObject:operation]){
             NSString *op1 = [self descriptionOfTopOfStack:stack callFromTop:NO];
             NSString *op2 = [self descriptionOfTopOfStack:stack callFromTop:NO];
             if(top){
-                result = [result stringByAppendingFormat:@"%@ %@ %@", op1,operation,op2];
+                result = [result stringByAppendingFormat:@"%@ %@ %@", op2,operation,op1];
             } else {
-                result = [result stringByAppendingFormat:@"(%@ %@ %@)", op1,operation,op2];
-            }
-        } else if ([@"*" isEqualToString:operation]) {
-            NSString *op1 = [self descriptionOfTopOfStack:stack callFromTop:NO];
-            NSString *op2 = [self descriptionOfTopOfStack:stack callFromTop:NO];
-            if(top){
-                result = [result stringByAppendingFormat:@"%@ %@ %@", op1,operation,op2];
-            } else {
-                result = [result stringByAppendingFormat:@"(%@ %@ %@)", op1,operation,op2];
-            }
-        } else if ([operation isEqualToString:@"-"]) {
-            NSString *subtrahend = [self descriptionOfTopOfStack:stack callFromTop:NO];
-            NSString *op = [self descriptionOfTopOfStack:stack callFromTop:NO];
-            if(top){
-                result = [result stringByAppendingFormat:@"%@ %@ %@", op,operation,subtrahend];
-            } else {
-                result = [result stringByAppendingFormat:@"(%@ %@ %@)", op,operation,subtrahend];
-            }
-        } else if ([operation isEqualToString:@"/"]) {
-            NSString *divisor = [self descriptionOfTopOfStack:stack callFromTop:NO];
-            NSString *op = [self descriptionOfTopOfStack:stack callFromTop:NO];
-            if(top){
-                result = [result stringByAppendingFormat:@"%@ %@ %@", op,operation,divisor];
-            } else {
-                result = [result stringByAppendingFormat:@"(%@ %@ %@)", op,operation,divisor];
+                result = [result stringByAppendingFormat:@"(%@ %@ %@)", op2,operation,op1];
             }
         }
         else if([unaryOps containsObject:operation]){
             result = [result stringByAppendingFormat:@" %@(%@) ", operation, [self descriptionOfTopOfStack:stack callFromTop:YES]];
-        } else if( [operation isEqualToString:@"π"]){
+        }
+        else if([nonOps containsObject:operation]){
             result = operation;
-        } else if( [operation isEqualToString:@"e"]){
-            result = operation;
-        }    
-        
+        }            
         else {
             result = [result stringByAppendingFormat:@"%@", operation];
         }
@@ -140,10 +116,9 @@
 }
 
 - (double)performOperation:(NSString *)operation
-       usingVariableValues:(NSDictionary*)variableValues
 {
     [self.programStack addObject:operation];
-    return [[self class] runProgram:self.program usingVariableValues:variableValues];
+    return [[self class] runProgram:self.program usingVariableValues:nil];
 }
 
 + (double)popOperandOffProgramStack:(NSMutableArray *)stack 
@@ -203,7 +178,8 @@
 }
 
 // new version of runProgram which accepts variable's dictionary.
-// 
+// RequiredTask#1a
+// RequiredTask#3c
 + (double)runProgram:(id)program
  usingVariableValues:(NSDictionary*)variableValues
 {
@@ -214,6 +190,7 @@
     return [self popOperandOffProgramStack:stack usingVariableValues:variableValues];
 }
 
+// RequiredTask#1b
 // get all the name of the variables used in a given program.
 // If the program has no variables return nil.
 // 

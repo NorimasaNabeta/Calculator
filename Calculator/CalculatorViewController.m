@@ -44,7 +44,7 @@
 }
 
 
-// Assignment2:Requiredtask#3e
+// Requiredtask#3e
 //
 - (IBAction)presetTestPressed:(UIButton*)sender {
     if ([sender.titleLabel.text isEqualToString:@"Test1"]) {
@@ -61,10 +61,7 @@
                                [NSNumber numberWithDouble:23], @"b", nil];
     }
     else if ([sender.titleLabel.text isEqualToString:@"Test3"]) {
-        self.testVariableValues = [NSDictionary dictionaryWithObjectsAndKeys:
-                               [NSNumber numberWithDouble:9], @"x",
-                               [NSNumber numberWithDouble:3], @"a",
-                               [NSNumber numberWithDouble:7], @"b", nil];
+        self.testVariableValues = nil;
     }
     if(userInTheMiddleOfEnteringANumber){
         [self enterPressed];
@@ -84,7 +81,7 @@
 
 }
 
-// Assignment2:Requiredtask#4
+// Requiredtask#4
 // Hitting Undo when the user is in the middle of typing should take back the last digit or 
 // decimal point pressed until doing so would clear the display entirely at which point it should
 // show the result of running the brain's current program in the display( and now the user 
@@ -140,7 +137,7 @@
         [self enterPressed];
     }
     NSString *operation=[sender currentTitle];
-    double result= [self.brain performOperation:operation usingVariableValues:self.testVariableValues];
+    double result= [self.brain performOperation:operation];
     self.display.text=[NSString stringWithFormat:@"%g", result];
     self.history.text=[CalculatorBrain descriptionOfProgram:self.brain.program];
     self.variables.text=@"";
