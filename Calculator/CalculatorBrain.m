@@ -55,12 +55,10 @@
     
     id topOfStack = [stack lastObject];
     if (topOfStack) [stack removeLastObject];
-    if ([topOfStack isKindOfClass:[NSNumber class]])
-    {
+    if ([topOfStack isKindOfClass:[NSNumber class]]){
         result = [topOfStack stringValue];
     }
-    else if ([topOfStack isKindOfClass:[NSString class]])
-    {
+    else if ([topOfStack isKindOfClass:[NSString class]]){
         NSString *operation = topOfStack;
         if([binaryOps containsObject:operation]){
             NSString *op1 = [self descriptionOfTopOfStack:stack callFromTop:NO];
