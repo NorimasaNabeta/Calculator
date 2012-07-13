@@ -8,6 +8,9 @@
 
 /* Begin PBXBuildFile section */
 		F27D89F515A279D700B8FFD2 /* CalculatorBrain.m in Sources */ = {isa = PBXBuildFile; fileRef = F27D89F415A279D700B8FFD2 /* CalculatorBrain.m */; };
+		F2A51BE915AFC57E004F7B25 /* AxesDrawer.m in Sources */ = {isa = PBXBuildFile; fileRef = F2A51BE815AFC57E004F7B25 /* AxesDrawer.m */; };
+		F2A51BED15AFC6DA004F7B25 /* GraphViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = F2A51BEC15AFC6DA004F7B25 /* GraphViewController.m */; };
+		F2A51BF015AFC70D004F7B25 /* GraphView.m in Sources */ = {isa = PBXBuildFile; fileRef = F2A51BEF15AFC70D004F7B25 /* GraphView.m */; };
 		F2BD545115A26BD300E37686 /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = F2BD545015A26BD300E37686 /* UIKit.framework */; };
 		F2BD545315A26BD300E37686 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = F2BD545215A26BD300E37686 /* Foundation.framework */; };
 		F2BD545515A26BD300E37686 /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = F2BD545415A26BD300E37686 /* CoreGraphics.framework */; };
@@ -21,6 +24,12 @@
 /* Begin PBXFileReference section */
 		F27D89F315A279D700B8FFD2 /* CalculatorBrain.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CalculatorBrain.h; sourceTree = "<group>"; };
 		F27D89F415A279D700B8FFD2 /* CalculatorBrain.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CalculatorBrain.m; sourceTree = "<group>"; };
+		F2A51BE715AFC57E004F7B25 /* AxesDrawer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AxesDrawer.h; sourceTree = "<group>"; };
+		F2A51BE815AFC57E004F7B25 /* AxesDrawer.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AxesDrawer.m; sourceTree = "<group>"; };
+		F2A51BEB15AFC6DA004F7B25 /* GraphViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GraphViewController.h; sourceTree = "<group>"; };
+		F2A51BEC15AFC6DA004F7B25 /* GraphViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GraphViewController.m; sourceTree = "<group>"; };
+		F2A51BEE15AFC70D004F7B25 /* GraphView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GraphView.h; sourceTree = "<group>"; };
+		F2A51BEF15AFC70D004F7B25 /* GraphView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GraphView.m; sourceTree = "<group>"; };
 		F2BD544C15A26BD300E37686 /* Calculator.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Calculator.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		F2BD545015A26BD300E37686 /* UIKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = UIKit.framework; path = System/Library/Frameworks/UIKit.framework; sourceTree = SDKROOT; };
 		F2BD545215A26BD300E37686 /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
@@ -83,8 +92,14 @@
 				F2BD545F15A26BD300E37686 /* CalculatorAppDelegate.h */,
 				F2BD546015A26BD400E37686 /* CalculatorAppDelegate.m */,
 				F2BD546215A26BD400E37686 /* MainStoryboard.storyboard */,
+				F2A51BEB15AFC6DA004F7B25 /* GraphViewController.h */,
+				F2A51BEC15AFC6DA004F7B25 /* GraphViewController.m */,
+				F2A51BEE15AFC70D004F7B25 /* GraphView.h */,
+				F2A51BEF15AFC70D004F7B25 /* GraphView.m */,
 				F27D89F315A279D700B8FFD2 /* CalculatorBrain.h */,
 				F27D89F415A279D700B8FFD2 /* CalculatorBrain.m */,
+				F2A51BE715AFC57E004F7B25 /* AxesDrawer.h */,
+				F2A51BE815AFC57E004F7B25 /* AxesDrawer.m */,
 				F2BD546515A26BD400E37686 /* CalculatorViewController.h */,
 				F2BD546615A26BD400E37686 /* CalculatorViewController.m */,
 				F2BD545715A26BD300E37686 /* Supporting Files */,
@@ -171,6 +186,9 @@
 				F2BD546115A26BD400E37686 /* CalculatorAppDelegate.m in Sources */,
 				F2BD546715A26BD400E37686 /* CalculatorViewController.m in Sources */,
 				F27D89F515A279D700B8FFD2 /* CalculatorBrain.m in Sources */,
+				F2A51BE915AFC57E004F7B25 /* AxesDrawer.m in Sources */,
+				F2A51BED15AFC6DA004F7B25 /* GraphViewController.m in Sources */,
+				F2A51BF015AFC70D004F7B25 /* GraphView.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
