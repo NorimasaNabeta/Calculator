@@ -18,6 +18,15 @@
                             <view contentMode="scaleToFill" id="xL3-Db-zik" customClass="GraphView">
                                 <rect key="frame" x="0.0" y="0.0" width="320" height="416"/>
                                 <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                                <subviews>
+                                    <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" text="test print" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" minimumFontSize="10" id="Zj6-eX-UL2">
+                                        <rect key="frame" x="11" y="200" width="280" height="40"/>
+                                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                        <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                        <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
+                                        <nil key="highlightedColor"/>
+                                    </label>
+                                </subviews>
                                 <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
                             </view>
                         </subviews>
@@ -25,11 +34,12 @@
                     </view>
                     <navigationItem key="navigationItem" id="WNa-SJ-QKr"/>
                     <connections>
+                        <outlet property="display" destination="Zj6-eX-UL2" id="xvf-0o-3Iw"/>
                         <outlet property="graphView" destination="xL3-Db-zik" id="6uc-le-tHX"/>
                     </connections>
                 </viewController>
             </objects>
-            <point key="canvasLocation" x="851" y="-7"/>
+            <point key="canvasLocation" x="921" y="-2"/>
         </scene>
         <!--Calculator View Controller - Calculator-->
         <scene sceneID="5">
@@ -412,7 +422,7 @@
                                     <color key="titleColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                 </state>
                                 <connections>
-                                    <segue destination="IhX-dz-fMq" kind="push" id="u1g-vi-X0w"/>
+                                    <segue destination="IhX-dz-fMq" kind="push" identifier="ShowGraph" id="u1g-vi-X0w"/>
                                 </connections>
                             </button>
                         </subviews>
@@ -446,6 +456,28 @@
             <point key="canvasLocation" x="279" y="72"/>
         </scene>
     </scenes>
+    <classes>
+        <class className="CalculatorViewController" superclassName="UIViewController">
+            <source key="sourceIdentifier" type="project" relativePath="./Classes/CalculatorViewController.h"/>
+            <relationships>
+                <relationship kind="outlet" name="display" candidateClass="UILabel"/>
+                <relationship kind="outlet" name="history" candidateClass="UILabel"/>
+            </relationships>
+        </class>
+        <class className="GraphView" superclassName="UIView">
+            <source key="sourceIdentifier" type="project" relativePath="./Classes/GraphView.h"/>
+            <relationships>
+                <relationship kind="outlet" name="dataSource"/>
+            </relationships>
+        </class>
+        <class className="GraphViewController" superclassName="UIViewController">
+            <source key="sourceIdentifier" type="project" relativePath="./Classes/GraphViewController.h"/>
+            <relationships>
+                <relationship kind="outlet" name="display" candidateClass="UILabel"/>
+                <relationship kind="outlet" name="graphView" candidateClass="GraphView"/>
+            </relationships>
+        </class>
+    </classes>
     <simulatedMetricsContainer key="defaultSimulatedMetrics">
         <simulatedStatusBarMetrics key="statusBar"/>
         <simulatedOrientationMetrics key="orientation"/>

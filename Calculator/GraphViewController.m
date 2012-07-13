@@ -7,6 +7,7 @@
 //
 
 #import "GraphViewController.h"
+#import "CalculatorBrain.h"
 
 @interface GraphViewController ()
 
@@ -14,6 +15,20 @@
 
 @implementation GraphViewController
 @synthesize graphView=_graphView;
+@synthesize program=_program;
+@synthesize display = _display;
+
+-(void) setProgram:(NSMutableArray *)program
+{
+    _program=program;
+
+    // RequiredTask#4
+    // i cannot display.
+    // self.display.text=[CalculatorBrain descriptionOfProgram:program];
+    // NSLog(@"-->%@", self.display.text);
+
+    [self.graphView setNeedsDisplay];
+}
 
 -(void) setGraphView:(GraphView *)graphView
 {
@@ -27,7 +42,19 @@
     tapRecognizer.numberOfTapsRequired=3;
     [self.graphView addGestureRecognizer:tapRecognizer];
     
+    //
+    
+    // GraphViewDataSource
+    self.graphView.dataSource=self;
 }
+
+// DataSource
+- (double)programForGraphView:(GraphView *)sender
+{
+    double val=0.0;
+    return [CalculatorBrain runProgram:self.program usingVariableValues:[NSDictionary dictionaryWithObjectsAndKeys:[NSNumber numberWithDouble:val], @"x", nil ]];    
+}
+
 
 - (id)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil
 {
@@ -47,6 +74,7 @@
 - (void)viewDidUnload
 {
     [self setGraphView:nil];
+    [self setDisplay:nil];
     [super viewDidUnload];
     // Release any retained subviews of the main view.
 }

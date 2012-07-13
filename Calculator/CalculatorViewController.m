@@ -9,6 +9,8 @@
 #import "CalculatorViewController.h"
 #import "CalculatorBrain.h"
 
+#import "GraphViewController.h"
+
 @interface CalculatorViewController ()
 @property (nonatomic) BOOL userInTheMiddleOfEnteringANumber;
 @property (nonatomic,strong) CalculatorBrain *brain;
@@ -155,4 +157,15 @@
 //    [self setVariables:nil];
     [super viewDidUnload];
 }
+
+
+// [self performSegueWithIdentifier:@"ShowDiagnosis" sender:self];
+- (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender
+{
+    if ([segue.identifier isEqualToString:@"ShowGraph"]) {
+        [segue.destinationViewController setProgram:self.brain.program];
+    }
+}
+
+
 @end

@@ -13,6 +13,8 @@
 @synthesize scale=_scale;
 @synthesize offOrigin=_offOrigin;
 @synthesize midPoint=_midPoint;
+@synthesize dataSource=_dataSource;
+
 
 #define DEFAULT_SCALE 0.90
 
