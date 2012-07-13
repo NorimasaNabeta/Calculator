@@ -22,11 +22,6 @@
 {
     _program=program;
 
-    // RequiredTask#4
-    // i cannot display.
-    // self.display.text=[CalculatorBrain descriptionOfProgram:program];
-    // NSLog(@"-->%@", self.display.text);
-
     [self.graphView setNeedsDisplay];
 }
 
@@ -69,6 +64,10 @@
 {
     [super viewDidLoad];
 	// Do any additional setup after loading the view.
+
+    // RequiredTask#4
+    self.display.text=[CalculatorBrain descriptionOfProgram:self.program];
+    // NSLog(@"-->%@", self.display.text);
 }
 
 - (void)viewDidUnload
