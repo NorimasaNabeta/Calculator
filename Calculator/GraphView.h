@@ -9,7 +9,7 @@
 #import <UIKit/UIKit.h>
 @class GraphView;  // forward declaration for use in @protocol
 @protocol GraphViewDataSource
-- (double)programForGraphView:(GraphView *)sender;
+- (NSArray* )programForGraphView:(GraphView *)sender;
 @end
 
 // RequiredTask#6 specify the protocol, it means dataSource?
@@ -36,6 +36,8 @@
 // set this property to whatever object will provide this View's data
 // usually a Controller using a GraphView in its View
 @property (nonatomic, weak) IBOutlet id <GraphViewDataSource> dataSource;
+
+- (void) drawGraph: (NSArray*) arrayPoints;
 
 
 @end

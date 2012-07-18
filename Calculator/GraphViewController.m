@@ -21,7 +21,6 @@
 -(void) setProgram:(NSMutableArray *)program
 {
     _program=program;
-
     [self.graphView setNeedsDisplay];
 }
 
@@ -30,8 +29,13 @@
     _graphView=graphView;
     // enable pinch gestures for scaling
     [self.graphView addGestureRecognizer:[[UIPinchGestureRecognizer alloc] initWithTarget:self.graphView action:@selector(pinch:)]];
+
     // enable pan gestures for moving graph
-    [self.graphView addGestureRecognizer:[[UIPanGestureRecognizer alloc] initWithTarget:self.graphView action:@selector(pan:)]]; 
+    //[self.graphView addGestureRecognizer:[[UIPanGestureRecognizer alloc] initWithTarget:self.graphView action:@selector(pan:)]]; 
+    UIPanGestureRecognizer *panRecognizer = [[UIPanGestureRecognizer alloc] initWithTarget:self.graphView action:@selector(pan:)];
+    // put a threshold value 
+    [self.graphView addGestureRecognizer:panRecognizer];
+    
     // enable triple-tap gestures for moving origin
     UITapGestureRecognizer *tapRecognizer = [[UITapGestureRecognizer alloc] initWithTarget:self.graphView action:@selector(tap:)];
     tapRecognizer.numberOfTapsRequired=3;
@@ -44,10 +48,21 @@
 }
 
 // DataSource
-- (double)programForGraphView:(GraphView *)sender
+- (NSArray* )programForGraphView:(GraphView *)sender
 {
-    double val=0.0;
-    return [CalculatorBrain runProgram:self.program usingVariableValues:[NSDictionary dictionaryWithObjectsAndKeys:[NSNumber numberWithDouble:val], @"x", nil ]];    
+    NSMutableArray *pnts = [[NSMutableArray alloc] initWithArray:nil];
+    double valx=0.0;
+    double valy=0.0;
+    //CGRect rect=sender.bounds;
+    //for (valx=rect.origin.x; valx<(rect.origin.x+rect.size.width); valx+=10) {
+    for (valx=-50; valx<50; valx+=1) {
+        valy=[CalculatorBrain runProgram:self.program 
+                     usingVariableValues:[NSDictionary dictionaryWithObjectsAndKeys:[NSNumber numberWithDouble:valx], @"x", nil ]]; 
+        [pnts addObject:[NSValue valueWithCGPoint:CGPointMake(valx,valy)]];
+    }
+//    [sender drawGraph:[pnts copy]];
+    
+    return [pnts copy];
 }
 
 

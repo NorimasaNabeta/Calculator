@@ -45,6 +45,30 @@
 //
 // In case of no operand in the stack, operation command should be error?
 //
+
+// http://piazza.com/class#summer2012/codingtogether/1287
+// Eytan Bernet 
+// + (id) OperationSet {
+//     static NSSet * _operationSet = nil;
+//     if (!_operationSet)
+// 		_operationSet = [[NSSet alloc] initWithObjects:@"sin",@"cos",@"tan",@"√",@"×",@"÷",@"+",@"−",@"π",@"±",@"e",@"log",nil];
+//	return _operationSet;
+//}
+// + (BOOL)isOperation:(NSString *)operation
+// {
+//    return [[self OperationSet] containsObject:operation];
+// }
+//
++ (BOOL)isOperation:(NSString *)operation
+{
+    static NSSet * _operationSet = nil;
+    if (!_operationSet){
+		_operationSet = [[NSSet alloc] initWithObjects:@"sin",@"cos",@"tan",@"√",@"×",@"÷",@"+",@"−",@"π",@"±",@"e",@"log",nil];
+    }
+    return [_operationSet containsObject:operation];
+}
+
+
 + (NSString *) descriptionOfTopOfStack:(NSMutableArray *)stack 
                         callFromTop:(BOOL) top
 {
@@ -194,7 +218,7 @@
 // 
 + (NSSet*) variablesUsingInProgram:(id)program
 {
-    NSSet *opSet = [[NSSet alloc] initWithObjects:@"+", @"-", @"/", @"*", @"e", @"π", @"sqrt", @"sin", @"cos", @"log", nil]; 
+    // NSSet *opSet = [[NSSet alloc] initWithObjects:@"+", @"-", @"/", @"*", @"e", @"π", @"sqrt", @"sin", @"cos", @"log", nil]; 
     NSSet *result;
     NSMutableArray *stack;
     NSMutableSet *chkSet=[[NSMutableSet alloc] initWithArray:nil];
@@ -203,7 +227,10 @@
     }
     for (id work in stack) {
         if ([work isKindOfClass:[NSString class]]) {
-            if ((! [opSet containsObject:work]) && (! [chkSet containsObject:work])){
+            if (
+                //(! [opSet containsObject:work]) &&
+                (! [CalculatorBrain isOperation:work]) &&
+                (! [chkSet containsObject:work])){
                     [chkSet addObject:work];
             }
         }
