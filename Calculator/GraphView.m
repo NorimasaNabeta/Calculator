@@ -52,6 +52,12 @@
         (gesture.state == UIGestureRecognizerStateEnded)) {
         self.scale *= gesture.scale; // adjust our scale
         gesture.scale = 1;
+
+        NSUserDefaults *ud = [NSUserDefaults standardUserDefaults];
+        [ud setDouble:self.scale forKey:@"scale"];
+        [ud synchronize];
+
+    
     }
 }
 
@@ -68,17 +74,47 @@
         
         // reset
         [gesture setTranslation:CGPointZero inView:self];
+        
+        NSUserDefaults *ud = [NSUserDefaults standardUserDefaults];
+        NSDictionary *origin = [NSDictionary dictionaryWithObjectsAndKeys:
+                                [NSNumber numberWithDouble:self.rectGraph.origin.x], @"x", 
+                                [NSNumber numberWithDouble:self.rectGraph.origin.y], @"y", 
+                                nil ];
+        [ud setObject:origin forKey:@"origin"];
+        [ud synchronize];
+
     }
 }
 
 
 - (void)setup
 {
+    
+    // Lecture3 slide:48/48
+    // RequiredTask#10
+    // http://stackoverflow.com/questions/471830/why-nsuserdefaults-failed-to-save-nsmutabledictionary-in-iphone-sdk
+    //
+    NSUserDefaults *ud = [NSUserDefaults standardUserDefaults];
+    double scaleVal = [ud doubleForKey:@"scale"];
+    if (scaleVal) {
+        // NSLog(@"[scale] Set defauls value : %g", scaleVal);
+        self.scale = scaleVal;
+    }
+    NSDictionary *origin = [ud objectForKey:@"origin"];
+    if (origin) {
+        CGPoint pnt = CGPointMake([[origin objectForKey:@"x"] doubleValue], [[origin objectForKey:@"x"] doubleValue]);
+        // NSLog(@"[origin] Set defauls value : (%g,%g)", pnt.x, pnt.y);
+        self.rectGraph = CGRectMake(pnt.x, pnt.y, self.bounds.size.width, self.bounds.size.height);
+    }
+    else {
+        self.rectGraph = self.bounds;        
+    }
+
     self.contentMode = UIViewContentModeRedraw; // if our bounds changes, redraw ourselves
     // self.offOrigin = CGPointZero;
     self.midPoint = CGPointMake((self.bounds.origin.x + self.bounds.size.width/2),
                                 (self.bounds.origin.y + self.bounds.size.height/2));
-    self.rectGraph = self.bounds;
+    // self.rectGraph = self.bounds;
 }
 
 - (void)awakeFromNib
