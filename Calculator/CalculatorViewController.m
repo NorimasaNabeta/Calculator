@@ -158,14 +158,78 @@
     [super viewDidUnload];
 }
 
+- (GraphViewController *)splitViewGraphViewController
+{
+    id gvc = [self.splitViewController.viewControllers lastObject];
+    if (![gvc isKindOfClass:[GraphViewController class]]) {
+        gvc = nil;
+    }
+    return gvc;
+}
 
-// [self performSegueWithIdentifier:@"ShowDiagnosis" sender:self];
 - (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender
 {
-    if ([segue.identifier isEqualToString:@"ShowGraph"]) {
-        [segue.destinationViewController setProgram:self.brain.program];
+    
+    if ([self splitViewGraphViewController]) {
+        [self splitViewGraphViewController].program = self.brain.program; 
+    } else {
+        if ([segue.identifier isEqualToString:@"ShowGraph"]) {
+            [segue.destinationViewController setProgram:self.brain.program];
+        }
     }
 }
+
+#pragma mark - UISplitViewControllerDelegate
+//
+//
+//
+- (void)awakeFromNib  // always try to be the split view's delegate
+{
+    [super awakeFromNib];
+    self.splitViewController.delegate = self;
+}
+
+#ifdef __IMPLEMENT_SPLIT__
+- (id <SplitViewBarButtonItemPresenter>)splitViewBarButtonItemPresenter
+{
+    id detailVC = [self.splitViewController.viewControllers lastObject];
+    if (![detailVC conformsToProtocol:@protocol(SplitViewBarButtonItemPresenter)]) {
+        detailVC = nil;
+    }
+    return detailVC;
+}
+#endif
+
+- (BOOL)splitViewController:(UISplitViewController *)svc
+   shouldHideViewController:(UIViewController *)vc
+              inOrientation:(UIInterfaceOrientation)orientation
+{
+//    return [self splitViewBarButtonItemPresenter] ? UIInterfaceOrientationIsPortrait(orientation) : NO;
+    return NO;
+}
+
+- (void)splitViewController:(UISplitViewController *)svc
+     willHideViewController:(UIViewController *)aViewController
+          withBarButtonItem:(UIBarButtonItem *)barButtonItem
+       forPopoverController:(UIPopoverController *)pc
+{
+    barButtonItem.title = self.title;
+//    [self splitViewBarButtonItemPresenter].splitViewBarButtonItem = barButtonItem;
+}
+
+- (void)splitViewController:(UISplitViewController *)svc
+     willShowViewController:(UIViewController *)aViewController
+  invalidatingBarButtonItem:(UIBarButtonItem *)barButtonItem
+{
+//    [self splitViewBarButtonItemPresenter].splitViewBarButtonItem = nil;
+}
+
+
+- (BOOL)shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)interfaceOrientation
+{
+    return YES;
+}
+
 
 
 @end
