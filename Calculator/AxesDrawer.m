@@ -6,6 +6,21 @@
 //  Copyright (c) 2011 Stanford University. All rights reserved.
 //
 
+// 2010-2011Fall(http://www.stanford.edu/class/cs193p/cgi-bin/drupal/downloads-2010-fall)
+// http://www.stanford.edu/class/cs193p/cgi-bin/drupal/system/files/sample_code/AxesDrawer_0.zip
+// 
+// 2011-2012Fall(http://www.stanford.edu/class/cs193p/cgi-bin/drupal/downloads-2011-fall)
+// THIS ONE--> http://www.stanford.edu/class/cs193p/cgi-bin/drupal/system/files/sample_code/AxesDrawer_2.zip
+// 
+
+// http://piazza.com/class#summer2012/codingtogether/1327
+// by Eytan Bernet
+// The AxisDrawer from 2010 is documented, but the code is wrong (does not draw negative axis properly)
+// The AxisDrawer from 2011 is not documented, but actually works :)
+// The documentation from the 2010 version, however, is correct, so i recommend you download the older version
+// and copy the comments over. That is what I did (well, I actually spent a few days tearing my hair out 
+// wondering why my axes were not drawing right until I realized I had the older code)
+
 #import "AxesDrawer.h"
 
 @implementation AxesDrawer
@@ -21,7 +36,9 @@
 #define HORIZONTAL_TEXT_MARGIN 6
 #define VERTICAL_TEXT_MARGIN 3
 
-+ (void)drawString:(NSString *)text atPoint:(CGPoint)location withAnchor:(int)anchor
++ (void)drawString:(NSString *)text 
+           atPoint:(CGPoint)location
+        withAnchor:(int)anchor
 {
 	if ([text length])
 	{
@@ -46,7 +63,9 @@
 #define HASH_MARK_SIZE 3
 #define MIN_PIXELS_PER_HASHMARK 25
 
-+ (void)drawHashMarksInRect:(CGRect)bounds originAtPoint:(CGPoint)axisOrigin scale:(CGFloat)pointsPerUnit
++ (void)drawHashMarksInRect:(CGRect)bounds 
+              originAtPoint:(CGPoint)axisOrigin 
+                      scale:(CGFloat)pointsPerUnit
 {
 	if (!pointsPerUnit) return;
 
@@ -129,7 +148,10 @@
 	CGContextStrokePath(context);
 }
 
-+ (void)drawAxesInRect:(CGRect)bounds originAtPoint:(CGPoint)axisOrigin scale:(CGFloat)pointsPerUnit
+
++ (void)drawAxesInRect:(CGRect)bounds 
+         originAtPoint:(CGPoint)axisOrigin 
+                 scale:(CGFloat)pointsPerUnit
 {
 	CGContextRef context = UIGraphicsGetCurrentContext();
 

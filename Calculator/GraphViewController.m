@@ -16,7 +16,7 @@
 @implementation GraphViewController
 @synthesize graphView=_graphView;
 @synthesize program=_program;
-@synthesize display = _display;
+@synthesize display=_display;
 
 -(void) setProgram:(NSMutableArray *)program
 {
@@ -48,21 +48,22 @@
 }
 
 // DataSource
-- (NSArray* )programForGraphView:(GraphView *)sender
+- (void)programForGraphView:(GraphView *)sender
 {
     NSMutableArray *pnts = [[NSMutableArray alloc] initWithArray:nil];
     double valx=0.0;
     double valy=0.0;
-    //CGRect rect=sender.bounds;
-    //for (valx=rect.origin.x; valx<(rect.origin.x+rect.size.width); valx+=10) {
-    for (valx=-50; valx<50; valx+=1) {
+    
+    for (valx=sender.rectGraph.origin.x-sender.midPoint.x; 
+         valx<(sender.rectGraph.origin.x-sender.midPoint.x+sender.rectGraph.size.width); 
+         valx++) {
         valy=[CalculatorBrain runProgram:self.program 
                      usingVariableValues:[NSDictionary dictionaryWithObjectsAndKeys:[NSNumber numberWithDouble:valx], @"x", nil ]]; 
         [pnts addObject:[NSValue valueWithCGPoint:CGPointMake(valx,valy)]];
     }
-//    [sender drawGraph:[pnts copy]];
+    [sender drawGraph:[pnts copy]];
     
-    return [pnts copy];
+    return;
 }
 
 

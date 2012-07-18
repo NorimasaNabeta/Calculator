@@ -9,7 +9,7 @@
 #import <UIKit/UIKit.h>
 @class GraphView;  // forward declaration for use in @protocol
 @protocol GraphViewDataSource
-- (NSArray* )programForGraphView:(GraphView *)sender;
+- (void)programForGraphView:(GraphView *)sender;
 @end
 
 // RequiredTask#6 specify the protocol, it means dataSource?
@@ -23,8 +23,8 @@
 // http://stackoverflow.com/questions/2971842/cgrect-var-as-property-value
 // CGRect is a struct, not an NSObject.
 //
-@property (nonatomic,assign) CGPoint offOrigin;
 @property (nonatomic,assign) CGPoint midPoint;
+@property (nonatomic,assign) CGRect rectGraph;
 
 // pinch for scaling
 - (void)pinch:(UIPinchGestureRecognizer *)gesture;

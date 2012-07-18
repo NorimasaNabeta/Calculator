@@ -11,8 +11,8 @@
 
 @implementation GraphView
 @synthesize scale=_scale;
-@synthesize offOrigin=_offOrigin;
 @synthesize midPoint=_midPoint;
+@synthesize rectGraph=_rectGraph;
 @synthesize dataSource=_dataSource;
 
 
@@ -40,7 +40,7 @@
         (gesture.state == UIGestureRecognizerStateEnded)) {
         CGPoint tapPoint = [gesture locationInView:gesture.view];
         //NSLog(@"%g, %g", tapPoint.x, tapPoint.y);
-        self.midPoint=tapPoint;
+        self.midPoint=CGPointMake(tapPoint.x+self.rectGraph.origin.x, tapPoint.y + self.rectGraph.origin.y );
         [self setNeedsDisplay];
     }
 }
@@ -61,8 +61,9 @@
         (gesture.state == UIGestureRecognizerStateEnded)) {
         CGPoint translation = [gesture translationInView:self];
         // NSLog(@"%g, %g", translation.x, translation.y);
-        self.offOrigin = CGPointMake((self.offOrigin.x+translation.x/2),
-                                     (self.offOrigin.y+translation.y/2));
+        self.rectGraph= CGRectMake((self.rectGraph.origin.x+translation.x/2), (self.rectGraph.origin.y+translation.y/2),
+                                     self.rectGraph.size.width, self.rectGraph.size.height);
+        self.midPoint=CGPointMake(self.midPoint.x+translation.x/2, self.midPoint.y+translation.y/2);
         [self setNeedsDisplay];
         
         // reset
@@ -74,9 +75,10 @@
 - (void)setup
 {
     self.contentMode = UIViewContentModeRedraw; // if our bounds changes, redraw ourselves
-    self.offOrigin = CGPointZero;
+    // self.offOrigin = CGPointZero;
     self.midPoint = CGPointMake((self.bounds.origin.x + self.bounds.size.width/2),
                                 (self.bounds.origin.y + self.bounds.size.height/2));
+    self.rectGraph = self.bounds;
 }
 
 - (void)awakeFromNib
@@ -107,18 +109,26 @@
 - (void) drawGraph: (NSArray*) arrayPoints
 {
     CGContextRef context = UIGraphicsGetCurrentContext();
-    CGPoint originPoint= CGPointMake(self.midPoint.x+self.offOrigin.x, self.midPoint.y + self.offOrigin.y );
 
     UIGraphicsPushContext(context);
     CGContextSetStrokeColorWithColor(context, [UIColor redColor].CGColor);
     CGContextBeginPath(context);
-    NSUInteger idx =0;
-    CGPoint pnt = [[arrayPoints objectAtIndex:idx] CGPointValue];
-    CGContextMoveToPoint(context, (pnt.x + originPoint.x), ((-3/2) *pnt.y + originPoint.y));
-    for (idx=1; idx<[arrayPoints count]; idx++) {
-        pnt = [[arrayPoints objectAtIndex:idx] CGPointValue];
-        CGContextAddLineToPoint(context, (pnt.x + originPoint.x), ((-3/2)*pnt.y + originPoint.y));
-        // NSLog(@"x=%g y=%g", (pnt.x + originPoint.x), ((-1)*pnt.y + originPoint.y) );
+
+    //NSLog(@"scale=%g", self.scale);
+    BOOL first=TRUE;
+    for (NSUInteger idx=0; idx<[arrayPoints count]; idx++) {
+        CGPoint pnt = [[arrayPoints objectAtIndex:idx] CGPointValue];
+        CGPoint chk = CGPointMake(pnt.x*self.scale+ self.midPoint.x, (-3/2)* pnt.y*self.scale+ self.midPoint.y);
+        if(CGRectContainsPoint(self.rectGraph, chk)){
+            if(first){
+                CGContextMoveToPoint(context, chk.x, chk.y);
+                first=FALSE;
+            }
+            else {
+                CGContextAddLineToPoint(context, chk.x, chk.y);
+            }
+            //NSLog(@"scale=%g x=%g y=%g", self.scale, pnt.x,pnt.y);
+        }
     };
     //CGContextAddCurveToPoint(context, mouthCP1.x, mouthCP2.y, mouthCP2.x, mouthCP2.y, mouthEnd.x, mouthEnd.y); // bezier curve
     CGContextStrokePath(context);
@@ -128,29 +138,21 @@
     return;
 }
 
-
 - (void)drawRect:(CGRect)rect
 {
     // Drawing code
-    // Drawing code
-    CGRect baseRect = self.bounds;
-    baseRect.origin.x += self.offOrigin.x;
-    baseRect.origin.y += self.offOrigin.y;
-    // NSLog(@"ox=%g oy=%g width=%g, height=%g", baseRect.origin.x, baseRect.origin.y, baseRect.size.width, baseRect.size.height);
 
-    // BoundaryRect
+    // (DEBUG) BoundaryRect
     CGContextRef context = UIGraphicsGetCurrentContext();
     CGContextSetFillColorWithColor(context, [UIColor redColor].CGColor);
-    CGContextAddRect(context, baseRect);
-    // CGContextFillPath(context);    
+    CGContextAddRect(context, self.rectGraph);
     CGContextStrokePath(context); 
      
-    //[AxesDrawer drawAxesInRect:baseRect originAtPoint:self.midPoint scale:self.scale];
-    CGPoint originPoint= CGPointMake(self.midPoint.x+self.offOrigin.x, self.midPoint.y + self.offOrigin.y );
-    [AxesDrawer drawAxesInRect:baseRect originAtPoint:originPoint scale:self.scale];
+    // AXES
+    [AxesDrawer drawAxesInRect:self.rectGraph originAtPoint:self.midPoint scale:self.scale];
 
-    NSArray* pnts = [self.dataSource programForGraphView:self];
-    [self drawGraph:pnts];
+    // GRAPH
+    [self.dataSource programForGraphView:self];
 }
 
 @end
