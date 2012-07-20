@@ -8,7 +8,6 @@
 
 #import "CalculatorViewController.h"
 #import "CalculatorBrain.h"
-
 #import "GraphViewController.h"
 
 @interface CalculatorViewController ()
@@ -20,7 +19,6 @@
 @implementation CalculatorViewController
 @synthesize display;
 @synthesize history;
-// @synthesize variables;
 @synthesize userInTheMiddleOfEnteringANumber;
 @synthesize brain=_brain;
 @synthesize testVariableValues=_testVariableValues;
@@ -43,44 +41,6 @@
         _brain=[[CalculatorBrain alloc] init];
     }
     return _brain;
-}
-
-
-// Requiredtask#3e
-//
-- (IBAction)presetTestPressed:(UIButton*)sender {
-    if ([sender.titleLabel.text isEqualToString:@"Test1"]) {
-        self.testVariableValues = [NSDictionary dictionaryWithObjectsAndKeys:
-                           [NSNumber numberWithDouble:5], @"x",
-                           [NSNumber numberWithDouble:1], @"a",
-                           [NSNumber numberWithDouble:2], @"b", nil];
-
-    }
-    else if ([sender.titleLabel.text isEqualToString:@"Test2"]) {
-        self.testVariableValues = [NSDictionary dictionaryWithObjectsAndKeys:
-                               [NSNumber numberWithDouble:10], @"x",
-                               [NSNumber numberWithDouble:.6], @"a",
-                               [NSNumber numberWithDouble:23], @"b", nil];
-    }
-    else if ([sender.titleLabel.text isEqualToString:@"Test3"]) {
-        self.testVariableValues = nil;
-    }
-    if(userInTheMiddleOfEnteringANumber){
-        [self enterPressed];
-    }
-    
-    double result=[CalculatorBrain runProgram:self.brain.program usingVariableValues:self.testVariableValues];
-    self.display.text=[NSString stringWithFormat:@"%g", result];
-    self.history.text=[CalculatorBrain descriptionOfProgram:self.brain.program];
-//    self.variables.text=@"";
-//    NSSet* sVar=[CalculatorBrain variablesUsingInProgram:self.brain.program];
-//    if( sVar){
-//        for (NSString* key in sVar){
-//            double val = [[self.testVariableValues objectForKey:key] doubleValue];
-//            self.variables.text= [self.variables.text stringByAppendingFormat:@"%@=%g ", key, val];
-//        }
-//    }
-
 }
 
 // Requiredtask#4
@@ -114,7 +74,6 @@
     [self.brain clearStack];
     self.history.text=@"";
     self.display.text=@"0";
-//    self.variables.text=@"";
     userInTheMiddleOfEnteringANumber=NO;
 }
 
@@ -142,19 +101,10 @@
     double result= [self.brain performOperation:operation];
     self.display.text=[NSString stringWithFormat:@"%g", result];
     self.history.text=[CalculatorBrain descriptionOfProgram:self.brain.program];
-//    self.variables.text=@"";
-//    NSSet* sVar=[CalculatorBrain variablesUsingInProgram:self.brain.program];
-//    if( sVar){
-//        for (NSString* key in sVar){
-//            double val = [[self.testVariableValues objectForKey:key] doubleValue];
-//            self.variables.text= [self.variables.text stringByAppendingFormat:@"%@=%g ", key, val];
-//        }
-//    }
 }
 - (void)viewDidUnload {
     [self setDisplay:nil];
     [self setHistory:nil];
-//    [self setVariables:nil];
     [super viewDidUnload];
 }
 

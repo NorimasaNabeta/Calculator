@@ -82,7 +82,13 @@
 	// Do any additional setup after loading the view.
 
     // RequiredTask#4
-    self.display.text=[CalculatorBrain descriptionOfProgram:self.program];
+    // http://piazza.com/class#summer2012/codingtogether/1364
+    // by Sanjaya Kumar
+    // NSArray *listPrograms = [[CalculatorBrain descriptionOfProgram:self.program] componentsSeparatedByString:@","];
+    // self.equationDisplay.text = [NSString stringWithFormat:@"y = %@",[listPrograms lastObject]];
+
+    //self.display.text=[CalculatorBrain descriptionOfProgram:self.program];
+    self.display.text = [NSString stringWithFormat:@"y = %@", [CalculatorBrain descriptionOfProgram:self.program]];
     // NSLog(@"-->%@", self.display.text);
 }
 

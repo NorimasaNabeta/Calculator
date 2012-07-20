@@ -64,6 +64,7 @@
         (gesture.state == UIGestureRecognizerStateEnded)) {
         CGPoint translation = [gesture translationInView:self];
         // NSLog(@"%g, %g", translation.x, translation.y);
+        // self.origin = CGPointMake (self.origin.x + translation.x, self.origin.y + translation.y);
         self.rectGraph= CGRectMake((self.rectGraph.origin.x+translation.x/2), (self.rectGraph.origin.y+translation.y/2),
                                      self.rectGraph.size.width, self.rectGraph.size.height);
         self.midPoint=CGPointMake(self.midPoint.x+translation.x/2, self.midPoint.y+translation.y/2);

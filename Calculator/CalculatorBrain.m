@@ -218,7 +218,6 @@
 // 
 + (NSSet*) variablesUsingInProgram:(id)program
 {
-    // NSSet *opSet = [[NSSet alloc] initWithObjects:@"+", @"-", @"/", @"*", @"e", @"π", @"sqrt", @"sin", @"cos", @"log", nil]; 
     NSSet *result;
     NSMutableArray *stack;
     NSMutableSet *chkSet=[[NSMutableSet alloc] initWithArray:nil];
@@ -227,10 +226,7 @@
     }
     for (id work in stack) {
         if ([work isKindOfClass:[NSString class]]) {
-            if (
-                //(! [opSet containsObject:work]) &&
-                (! [CalculatorBrain isOperation:work]) &&
-                (! [chkSet containsObject:work])){
+            if ((! [CalculatorBrain isOperation:work]) && (! [chkSet containsObject:work])){
                     [chkSet addObject:work];
             }
         }
