@@ -122,7 +122,7 @@
         [self splitViewGraphViewController].program = self.brain.program; 
     } else {
         // else segue using ShowDiagnosis
-        [self performSegueWithIdentifier:@"ShowDiagnosis" sender:self];
+        [self performSegueWithIdentifier:@"ShowGraph" sender:self];
     }
 }
 

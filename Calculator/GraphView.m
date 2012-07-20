@@ -11,7 +11,7 @@
 
 @implementation GraphView
 @synthesize scale=_scale;
-@synthesize midPoint=_midPoint;
+@synthesize origin=_origin;
 @synthesize rectGraph=_rectGraph;
 @synthesize dataSource=_dataSource;
 
@@ -30,6 +30,26 @@
     if (scale != _scale) {
         _scale = scale;
         [self setNeedsDisplay]; // any time our scale changes, call for redraw
+
+        NSUserDefaults *ud = [NSUserDefaults standardUserDefaults];
+        [ud setDouble:self.scale forKey:@"scale"];
+        [ud synchronize];
+    }
+}
+
+- (void) setOrigin:(CGPoint)origin
+{
+    if((_origin.x != origin.x) || (_origin.y != origin.y)){
+        _origin = origin;
+        [self setNeedsDisplay]; // any time our scale changes, call for redraw
+        
+        NSUserDefaults *ud = [NSUserDefaults standardUserDefaults];
+        NSDictionary *origin = [NSDictionary dictionaryWithObjectsAndKeys:
+                                [NSNumber numberWithDouble:self.origin.x], @"x", 
+                                [NSNumber numberWithDouble:self.origin.y], @"y", 
+                                nil ];
+        [ud setObject:origin forKey:@"origin"];
+        [ud synchronize];
     }
 }
 
@@ -40,7 +60,7 @@
         (gesture.state == UIGestureRecognizerStateEnded)) {
         CGPoint tapPoint = [gesture locationInView:gesture.view];
         //NSLog(@"%g, %g", tapPoint.x, tapPoint.y);
-        self.midPoint=CGPointMake(tapPoint.x+self.rectGraph.origin.x, tapPoint.y + self.rectGraph.origin.y );
+        self.origin=CGPointMake(tapPoint.x, tapPoint.y);
         [self setNeedsDisplay];
     }
 }
@@ -52,9 +72,6 @@
         (gesture.state == UIGestureRecognizerStateEnded)) {
         self.scale *= gesture.scale; // adjust our scale
         gesture.scale = 1;
-        NSUserDefaults *ud = [NSUserDefaults standardUserDefaults];
-        [ud setDouble:self.scale forKey:@"scale"];
-        [ud synchronize];
     }
 }
 
@@ -64,22 +81,14 @@
         (gesture.state == UIGestureRecognizerStateEnded)) {
         CGPoint translation = [gesture translationInView:self];
         // NSLog(@"%g, %g", translation.x, translation.y);
-        // self.origin = CGPointMake (self.origin.x + translation.x, self.origin.y + translation.y);
         self.rectGraph= CGRectMake((self.rectGraph.origin.x+translation.x/2), (self.rectGraph.origin.y+translation.y/2),
                                      self.rectGraph.size.width, self.rectGraph.size.height);
-        self.midPoint=CGPointMake(self.midPoint.x+translation.x/2, self.midPoint.y+translation.y/2);
+        self.origin=CGPointMake(self.origin.x+translation.x/2, self.origin.y+translation.y/2);
         [self setNeedsDisplay];
         
         // reset
         [gesture setTranslation:CGPointZero inView:self];
 
-        NSUserDefaults *ud = [NSUserDefaults standardUserDefaults];
-        NSDictionary *origin = [NSDictionary dictionaryWithObjectsAndKeys:
-                                [NSNumber numberWithDouble:self.rectGraph.origin.x], @"x", 
-                                [NSNumber numberWithDouble:self.rectGraph.origin.y], @"y", 
-                                nil ];
-        [ud setObject:origin forKey:@"origin"];
-        [ud synchronize];
     }
 }
 
@@ -96,19 +105,18 @@
         // NSLog(@"[scale] Set defauls value : %g", scaleVal);
         self.scale = scaleVal;
     }
-    NSDictionary *origin = [ud objectForKey:@"origin"];
-    if (origin) {
-        CGPoint pnt = CGPointMake([[origin objectForKey:@"x"] doubleValue], [[origin objectForKey:@"x"] doubleValue]);
+    NSDictionary *dicOrigin = [ud objectForKey:@"origin"];
+    if (dicOrigin) {
+        self.origin = CGPointMake([[dicOrigin objectForKey:@"x"] doubleValue], [[dicOrigin objectForKey:@"y"] doubleValue]);
         // NSLog(@"[origin] Set defauls value : (%g,%g)", pnt.x, pnt.y);
-        self.rectGraph = CGRectMake(pnt.x, pnt.y, self.bounds.size.width, self.bounds.size.height);
     }
     else {
-        self.rectGraph = self.bounds;        
-    }
-    self.contentMode = UIViewContentModeRedraw; // if our bounds changes, redraw ourselves
-    // self.offOrigin = CGPointZero;
-    self.midPoint = CGPointMake((self.bounds.origin.x + self.bounds.size.width/2),
+        //self.origin = CGPointZero;        
+        self.origin = CGPointMake((self.bounds.origin.x + self.bounds.size.width/2),
                                 (self.bounds.origin.y + self.bounds.size.height/2));
+    }   
+    self.rectGraph = self.bounds;
+    self.contentMode = UIViewContentModeRedraw; // if our bounds changes, redraw ourselves
 }
 
 - (void)awakeFromNib
@@ -148,7 +156,7 @@
     BOOL first=TRUE;
     for (NSUInteger idx=0; idx<[arrayPoints count]; idx++) {
         CGPoint pnt = [[arrayPoints objectAtIndex:idx] CGPointValue];
-        CGPoint chk = CGPointMake(pnt.x*self.scale+ self.midPoint.x, (-3/2)* pnt.y*self.scale+ self.midPoint.y);
+        CGPoint chk = CGPointMake(pnt.x*self.scale+ self.origin.x, (-3/2)* pnt.y*self.scale+ self.origin.y);
         if(CGRectContainsPoint(self.rectGraph, chk)){
             if(first){
                 CGContextMoveToPoint(context, chk.x, chk.y);
@@ -171,7 +179,7 @@
 - (void)drawRect:(CGRect)rect
 {
     // Drawing code
-
+    
     // (DEBUG) BoundaryRect
     CGContextRef context = UIGraphicsGetCurrentContext();
     CGContextSetFillColorWithColor(context, [UIColor redColor].CGColor);
@@ -179,7 +187,7 @@
     CGContextStrokePath(context); 
      
     // AXES
-    [AxesDrawer drawAxesInRect:self.rectGraph originAtPoint:self.midPoint scale:self.scale];
+    [AxesDrawer drawAxesInRect:self.rectGraph originAtPoint:self.origin scale:self.scale];
 
     // GRAPH
     [self.dataSource programForGraphView:self];
