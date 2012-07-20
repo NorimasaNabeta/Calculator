@@ -9,8 +9,9 @@
 #import "CalculatorViewController.h"
 #import "CalculatorBrain.h"
 #import "GraphViewController.h"
+#import "SplitViewBarButtonItemPresenter.h"
 
-@interface CalculatorViewController ()
+@interface CalculatorViewController () <SplitViewBarButtonItemPresenter>
 @property (nonatomic) BOOL userInTheMiddleOfEnteringANumber;
 @property (nonatomic,strong) CalculatorBrain *brain;
 @property (nonatomic,strong) NSDictionary* testVariableValues;
@@ -22,7 +23,7 @@
 @synthesize userInTheMiddleOfEnteringANumber;
 @synthesize brain=_brain;
 @synthesize testVariableValues=_testVariableValues;
-
+@synthesize splitViewBarButtonItem=_splitViewBarButtonItem;
 
 -(NSDictionary*) variableValues
 {
@@ -116,16 +117,19 @@
     }
     return gvc;
 }
-
-- (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender
-{
-    
+- (IBAction)graphPressed {
     if ([self splitViewGraphViewController]) {
         [self splitViewGraphViewController].program = self.brain.program; 
     } else {
-        if ([segue.identifier isEqualToString:@"ShowGraph"]) {
-            [segue.destinationViewController setProgram:self.brain.program];
-        }
+        // else segue using ShowDiagnosis
+        [self performSegueWithIdentifier:@"ShowDiagnosis" sender:self];
+    }
+}
+
+- (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender
+{
+    if ([segue.identifier isEqualToString:@"ShowGraph"]) {
+        [segue.destinationViewController setProgram:self.brain.program];
     }
 }
 
@@ -139,7 +143,6 @@
     self.splitViewController.delegate = self;
 }
 
-#ifdef __IMPLEMENT_SPLIT__
 - (id <SplitViewBarButtonItemPresenter>)splitViewBarButtonItemPresenter
 {
     id detailVC = [self.splitViewController.viewControllers lastObject];
@@ -148,14 +151,12 @@
     }
     return detailVC;
 }
-#endif
 
 - (BOOL)splitViewController:(UISplitViewController *)svc
    shouldHideViewController:(UIViewController *)vc
               inOrientation:(UIInterfaceOrientation)orientation
 {
-//    return [self splitViewBarButtonItemPresenter] ? UIInterfaceOrientationIsPortrait(orientation) : NO;
-    return NO;
+    return [self splitViewBarButtonItemPresenter] ? UIInterfaceOrientationIsPortrait(orientation) : NO;
 }
 
 - (void)splitViewController:(UISplitViewController *)svc
@@ -164,14 +165,14 @@
        forPopoverController:(UIPopoverController *)pc
 {
     barButtonItem.title = self.title;
-//    [self splitViewBarButtonItemPresenter].splitViewBarButtonItem = barButtonItem;
+    [self splitViewBarButtonItemPresenter].splitViewBarButtonItem = barButtonItem;
 }
 
 - (void)splitViewController:(UISplitViewController *)svc
      willShowViewController:(UIViewController *)aViewController
   invalidatingBarButtonItem:(UIBarButtonItem *)barButtonItem
 {
-//    [self splitViewBarButtonItemPresenter].splitViewBarButtonItem = nil;
+    [self splitViewBarButtonItemPresenter].splitViewBarButtonItem = nil;
 }
 
 

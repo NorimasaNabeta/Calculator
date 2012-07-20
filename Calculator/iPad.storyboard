@@ -16,16 +16,22 @@
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                         <subviews>
                             <view contentMode="scaleToFill" id="Rdc-WD-Af1" customClass="GraphView">
-                                <rect key="frame" x="0.0" y="-247" width="768" height="1258"/>
+                                <rect key="frame" x="0.0" y="44" width="768" height="960"/>
                                 <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                 <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
                             </view>
+                            <toolbar opaque="NO" clearsContextBeforeDrawing="NO" contentMode="scaleToFill" id="GIm-0B-06n">
+                                <rect key="frame" x="0.0" y="0.0" width="768" height="44"/>
+                                <autoresizingMask key="autoresizingMask" widthSizable="YES"/>
+                                <items/>
+                            </toolbar>
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
                     </view>
                     <toolbarItems/>
                     <connections>
                         <outlet property="graphView" destination="Rdc-WD-Af1" id="AM2-Ri-A0U"/>
+                        <outlet property="toolbar" destination="GIm-0B-06n" id="B7y-es-xpE"/>
                     </connections>
                 </viewController>
             </objects>
@@ -64,7 +70,7 @@
         <scene sceneID="cFH-vh-4jK">
             <objects>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="mdt-6Q-ucG" sceneMemberID="firstResponder"/>
-                <viewController id="KdP-fa-wlf" customClass="CalculatorViewController" sceneMemberID="viewController">
+                <viewController title="Calculator" id="KdP-fa-wlf" customClass="CalculatorViewController" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="f4o-NN-d23">
                         <rect key="frame" x="0.0" y="64" width="320" height="788"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
@@ -440,6 +446,9 @@
                                 <state key="highlighted">
                                     <color key="titleColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                 </state>
+                                <connections>
+                                    <action selector="graphPressed" destination="KdP-fa-wlf" eventType="touchUpInside" id="Khd-gk-7Ye"/>
+                                </connections>
                             </button>
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
@@ -475,6 +484,7 @@
             <relationships>
                 <relationship kind="outlet" name="display" candidateClass="UILabel"/>
                 <relationship kind="outlet" name="graphView" candidateClass="GraphView"/>
+                <relationship kind="outlet" name="toolbar" candidateClass="UIToolbar"/>
             </relationships>
         </class>
     </classes>

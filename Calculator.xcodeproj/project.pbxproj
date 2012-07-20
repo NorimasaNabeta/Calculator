@@ -20,6 +20,7 @@
 		F2BD546415A26BD400E37686 /* iPhone.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = F2BD546215A26BD400E37686 /* iPhone.storyboard */; };
 		F2BD546715A26BD400E37686 /* CalculatorViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = F2BD546615A26BD400E37686 /* CalculatorViewController.m */; };
 		F2D4407A15B69070007F3D5E /* iPad.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = F2D4407915B69070007F3D5E /* iPad.storyboard */; };
+		F2D440E515B99ADF007F3D5E /* RotatableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = F2D440E315B99ADF007F3D5E /* RotatableViewController.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -45,6 +46,9 @@
 		F2BD546515A26BD400E37686 /* CalculatorViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = CalculatorViewController.h; sourceTree = "<group>"; };
 		F2BD546615A26BD400E37686 /* CalculatorViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = CalculatorViewController.m; sourceTree = "<group>"; };
 		F2D4407915B69070007F3D5E /* iPad.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; path = iPad.storyboard; sourceTree = "<group>"; };
+		F2D440E215B99ADE007F3D5E /* RotatableViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RotatableViewController.h; sourceTree = "<group>"; };
+		F2D440E315B99ADF007F3D5E /* RotatableViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RotatableViewController.m; sourceTree = "<group>"; };
+		F2D440E415B99ADF007F3D5E /* SplitViewBarButtonItemPresenter.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SplitViewBarButtonItemPresenter.h; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -91,6 +95,9 @@
 		F2BD545615A26BD300E37686 /* Calculator */ = {
 			isa = PBXGroup;
 			children = (
+				F2D440E215B99ADE007F3D5E /* RotatableViewController.h */,
+				F2D440E315B99ADF007F3D5E /* RotatableViewController.m */,
+				F2D440E415B99ADF007F3D5E /* SplitViewBarButtonItemPresenter.h */,
 				F2BD545F15A26BD300E37686 /* CalculatorAppDelegate.h */,
 				F2BD546015A26BD400E37686 /* CalculatorAppDelegate.m */,
 				F2BD546215A26BD400E37686 /* iPhone.storyboard */,
@@ -193,6 +200,7 @@
 				F2A51BE915AFC57E004F7B25 /* AxesDrawer.m in Sources */,
 				F2A51BED15AFC6DA004F7B25 /* GraphViewController.m in Sources */,
 				F2A51BF015AFC70D004F7B25 /* GraphView.m in Sources */,
+				F2D440E515B99ADF007F3D5E /* RotatableViewController.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

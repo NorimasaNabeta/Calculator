@@ -15,6 +15,7 @@
 
 @implementation GraphViewController
 @synthesize graphView=_graphView;
+@synthesize toolbar = _toolbar;
 @synthesize program=_program;
 @synthesize display=_display;
 
@@ -96,6 +97,7 @@
 {
     [self setGraphView:nil];
     [self setDisplay:nil];
+    [self setToolbar:nil];
     [super viewDidUnload];
     // Release any retained subviews of the main view.
 }

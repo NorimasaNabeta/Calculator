@@ -10,9 +10,9 @@
 #import "GraphView.h"
 
 @interface GraphViewController : UIViewController <GraphViewDataSource>
-@property (nonatomic,weak) IBOutlet GraphView *graphView;
-
-@property (nonatomic,strong) NSMutableArray* program;
+@property (weak, nonatomic) IBOutlet GraphView *graphView;
+@property (weak, nonatomic) IBOutlet UIToolbar *toolbar;
+@property (strong,nonatomic) NSMutableArray* program;
 @property (weak, nonatomic) IBOutlet UILabel *display;
 
 @end

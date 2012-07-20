@@ -6,7 +6,7 @@
         <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="1181"/>
     </dependencies>
     <scenes>
-        <!--Graph View Controller-->
+        <!--Graph View Controller - Graph-->
         <scene sceneID="Mbu-cF-Cci">
             <objects>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="bxL-lh-Vho" userLabel="First Responder" sceneMemberID="firstResponder"/>
@@ -32,7 +32,7 @@
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
                     </view>
-                    <navigationItem key="navigationItem" id="WNa-SJ-QKr"/>
+                    <navigationItem key="navigationItem" title="Graph" id="WNa-SJ-QKr"/>
                     <connections>
                         <outlet property="display" destination="Zj6-eX-UL2" id="xvf-0o-3Iw"/>
                         <outlet property="graphView" destination="xL3-Db-zik" id="6uc-le-tHX"/>
@@ -422,7 +422,7 @@
                                     <color key="titleColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                 </state>
                                 <connections>
-                                    <segue destination="IhX-dz-fMq" kind="push" identifier="ShowGraph" id="u1g-vi-X0w"/>
+                                    <action selector="graphPressed" destination="2" eventType="touchUpInside" id="Bu1-DX-ga4"/>
                                 </connections>
                             </button>
                         </subviews>
@@ -432,6 +432,7 @@
                     <connections>
                         <outlet property="display" destination="hbg-Xb-z4I" id="rsO-fl-UeP"/>
                         <outlet property="history" destination="34v-yC-rFA" id="U2o-YL-t2L"/>
+                        <segue destination="IhX-dz-fMq" kind="push" identifier="ShowGraph" id="9Fs-O8-Iak"/>
                     </connections>
                 </viewController>
             </objects>
